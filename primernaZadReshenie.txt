@@ -1,0 +1,226 @@
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <vector>
+ 
+using namespace std;
+ 
+class File {
+private:
+    string fileName;
+    string fileType;
+    string owner;
+    int fileSize;
+    int fileVersion;
+public:
+    static int versionCounter;
+ 
+    File() {
+        fileName = "n/a";
+        fileType = "n/a";
+        owner = "n/a";
+        fileSize = 0;
+        fileVersion = 0;
+    }
+ 
+    File(string name, string type, string owner, int size) {
+        this->fileName = name;
+        this->fileType = type;
+        this->owner = owner;
+        this->fileSize = size;
+        this->fileVersion = 1;
+    }
+ 
+    string getFileName() {
+        return fileName;
+    }
+ 
+    string getFileType() {
+        return fileType;
+    }
+ 
+    string getFileOwner() {
+        return owner;
+    }
+ 
+    int getFileSize() {
+        return fileSize;
+    }
+ 
+    int getVersion() {
+        return fileVersion;
+    }
+ 
+    // ternary operator
+    //                  -50
+    void changeSize(int newSize) {
+        // fileSize = newSize;
+        fileSize = (newSize > 0) ? newSize : 0;
+    }
+    
+    void changeVersion(int newVersion) {
+        // fileVersion = newVersion;
+        fileVersion = newVersion;
+        versionCounter++;
+    }
+ 
+    /*
+      File  < File
+    */
+    bool operator<(File otherFile) {
+        /*if (fileSize < otherFile.fileSize) {
+            return true;
+        }
+        else return false;*/
+        return fileSize < otherFile.fileSize;
+    }
+ 
+    bool operator==(File otherFile) {
+        /*
+        if (fileName == otherFile.fileName) {
+            if (fileVersion == otherFile.fileVersion) {
+                return true;
+            }
+            else return false;
+        }
+        else return false;
+        */
+ 
+        /*
+        if ((fileName == otherFile.fileName) && (fileVersion == otherFile.fileVersion)) {
+            return true;
+        }
+        else return false;
+        */
+ 
+        return fileName == otherFile.fileName && fileVersion == otherFile.fileVersion;
+    }
+    // File f3 = f1 + f2;
+    File operator+(File otherFile) {
+        string newFileName = fileName + "_" + otherFile.fileName;
+        string newFileType = fileType;
+        string newFileOwner = owner;
+        int newFileSize = fileSize + otherFile.fileSize;
+ 
+        File newFile = File(newFileName, newFileType, newFileOwner, newFileSize);
+ 
+        return newFile;
+    }
+    
+    // "pesho 12"
+    // "ivan"
+    friend ostream& operator<<(ostream &out, File f) {
+        out << f.fileName << f.fileType << ", size: " << f.fileSize << ", version " << f.fileVersion << endl;
+        return out;
+    }
+ 
+    friend istream& operator>>(istream &in, File &f) {
+        cout << "input file name: ";
+        getline(cin, f.fileName);
+        cout << "input file type: ";
+        getline(cin, f.fileType);
+        cout << "input file owner: ";
+        getline(cin, f.owner);
+        cout << "input file size and version: ";
+        in >> f.fileSize >> f.fileVersion;
+        return in;
+    }
+ 
+};
+ 
+class ExamSystem {
+private:
+    string systemName;
+    vector<File> files; // File files[];
+public:
+    // database.txt
+    ExamSystem(string fileName) {
+        systemName = fileName;
+    }
+ 
+    void addFile(File &f) {
+        files.push_back(f);
+    }
+    //  0  1  2  3  4  5
+    // f1 f2 f3 f4 f5 f6
+    void removeDuplicates() {
+        for (int i = 0; i < files.size() - 1; i++) {
+            for (int j = i + 1; j < files.size(); j++) {
+                if (files[i] == files[j]) files.erase(files.begin() + j);
+            }
+        }
+    }
+ 
+    bool checkForDuplicates() {
+        for (int i = 0; i < files.size() - 1; i++) {
+            for (int j = i + 1; i < files.size(); j++) {
+                if (files[i] == files[j]) return true;
+            }
+        }
+        return false;
+    }
+ 
+    File smallestFile() {
+        int smallestSize = files[0].getFileSize();
+        int smallestPosition = 0;
+        for (int i = 1; i < files.size(); i++) {
+            if (files[i].getFileSize() < smallestSize) {
+                smallestSize = files[i].getFileSize();
+                smallestPosition = i;
+            }
+        }
+ 
+        return files[smallestPosition];
+    }
+ 
+    int totalFileSize() {
+        int totalSize = 0;
+        //  0  1  2  3  4  5
+        // f1 f2 f3 f4 f5 f6
+        for (File f : files) {
+            totalSize += f.getFileSize();
+        }
+ 
+        for (int i = 0; i < files.size(); i++) {
+            totalSize += files[i].getFileSize();
+        }
+ 
+        return totalSize;
+    }
+ 
+    friend ostream& operator<< (ostream &out, ExamSystem s) {
+        out << "--- " << s.systemName << " ---" << endl;
+        for (File f : s.files) {
+            out << f;
+        }
+        return out;
+    }
+};
+ 
+int File::versionCounter = 0;
+ 
+int main() {
+    File f1 = File("fail 1", ".txt", "ivan", 150);
+    File f2 = File("fail 2", ".txt", "ivan", 300);
+    cout << f1;
+    cout << f2;
+ 
+    File f3 = f1 + f2;
+ 
+    File f5 = File("fail 3", ".txt", "ivan", 50);
+    File f6 = File("fail 1", ".txt", "ivan", 50);
+    ExamSystem s1 = ExamSystem("kotka");
+    s1.addFile(f1);
+    s1.addFile(f2);
+    s1.addFile(f3);
+    s1.addFile(f5);
+    s1.addFile(f6);
+ 
+    cout << s1;
+    cout << s1.checkForDuplicates() << endl;
+    s1.removeDuplicates();
+    cout << s1;
+ 
+    File smallest = s1.smallestFile();
+    cout << "Smallest file is : " << smallest << endl;
+}

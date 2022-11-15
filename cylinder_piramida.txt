@@ -1,0 +1,33 @@
+#include <iostream>
+using namespace std;
+class SquarePyramid;
+class Cylinder {
+private:
+    float height;
+public:    
+    Cylinder(float h) {
+        height = h;
+    }
+    void IsHigher(SquarePyramid pyrH);
+ 
+};
+class SquarePyramid {
+private:
+    float SPheight;
+public:
+    SquarePyramid(float sph) {
+        SPheight = sph;
+    }
+    friend void Cylinder::IsHigher(SquarePyramid pyrH);
+};
+void Cylinder::IsHigher(SquarePyramid pyrH) {
+    if (height > pyrH.SPheight) {
+        printf("%s", " Cylinder is bigger");
+    }
+    else
+        printf("%s", " Cylinder is smaller");
+}
+ 
+ int main() {
+ 
+}

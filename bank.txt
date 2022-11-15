@@ -1,0 +1,63 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+    
+}
+
+class bank {
+    public:
+        double balance;
+        string owner;
+        string identificator;
+        
+        // Constructor
+        bank(double bal = 0, string own, string ident) {
+            balance = bal;
+            owner = own;
+            identificator = ident;
+        }
+        
+        // Comparare accounts
+        bool compare(string ident1, string ident2) {
+            if (ident1 != ident2) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        
+        // Deposit funds
+        void deposit(double sum) {
+            if (sum < 0) {
+                cout << "Error: Sum to deposit must be a positive number" << endl
+            } else {
+                balance = balance + sum;
+            }
+        }
+        
+        // Withdraw funds
+        void withdraw(double sum) {
+            if (sum < 0) {
+                cout << "Error: Sum to withdraw must be a positive number" << endl
+            } else {
+                balance = balance - sum;
+                
+                if (balance < 0) {
+                    balance = 0;
+                }
+            }
+        }
+        
+        // Print account information
+        void printInfo() {
+            cout << "Account info: \n" <<
+                    "Account balance: " << balance <<
+                    "\n Account Owner: " << owner <<
+                    "\n Account Identificator: " << identificator   << endl;
+        }
+        
+}
