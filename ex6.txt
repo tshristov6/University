@@ -1,0 +1,65 @@
+class Item:
+
+    def __init__(self, material):
+     self.material = material
+
+
+class Chasha(Item):
+    
+    handle_dc = {
+        "True": "ima",
+        "False": "nqma"
+       
+    }
+    def __init__(self, volume, handle, material):
+        super().__init__(material)
+        self.volume = volume
+        self.handle = handle
+        
+    def __gt__(self, other):
+        return self.handle > other.handle
+
+    def __lt__(self, other):
+        return self.handle < other.handle
+    
+    def __eq__(self, other):
+        return self.handle == other.handle and self.volume == other.volume
+  
+    def __str__(self):
+        return "Chashata e ot " + self.material + " s obem " + str(self.volume) + " i " + Chasha.handle_dc[str(self.handle)] + " drujka"
+        
+    def print_c(slef):
+        return self.volume
+
+class Plate(Item):
+    def __init__(self, diameter, material):
+        super().__init__(material)
+        self.diameter = diameter
+    
+    def __gt__(self, other):
+        return self.diameter >  other.diameter
+
+    def __lt__(self, other):
+        return self.diameter < other.diameter
+    
+    def __eq__(self, other):
+        return self.diameter == other.diameter
+  
+    def __str__(self):
+        return "Chiniqata e ot " + self.material + " s diametur " + str(self.diameter)
+        
+    def print_d(slef):
+        return self.diameter
+
+a = Chasha(20,True, "staklo")
+b = Chasha(20,False, "staklo")
+c = Chasha(10,False, "staklo")
+
+z = Plate(20, "da ima")
+d = Plate(10, "staklo")
+q = Plate(isinstance(5, int), "plastic")
+
+print(z < q)
+print(a > c)
+print(a)
+print(z)
