@@ -1,0 +1,64 @@
+class Dragon:
+    
+    dragons_count = []
+    
+    def __init__(self, name, wingspan, **kwargs):
+        self.__name = name
+        self.__wingspan = wingspan
+        self.energy = 100
+        Dragon.dragons_count.append(self)
+        
+        for (key, val) in kwargs.items():
+            self.__dict__[key] = val
+        
+    def fly(self, time):
+        energy_required = (time*3)
+        
+        if self.energy < energy_required:
+            print(f"The Dragon can't fly {time} minutes")
+        else:
+            print(f"The Dragon is flying")
+            
+    def eat(self, amount):
+        self.energy += (amount * 0.8)
+        
+    def grow(self):
+        self.__wingspan += 1
+        
+    def amount(self, number):
+        amount_of_args = 0
+        for (key, val) in self.__dict__.items():
+            if isinstance(val, int):
+                if val > number:
+                    amount_of_args += 1
+        return amount_of_args
+    
+    def create_dict(self, target):
+        lesser = []
+        greater = []
+        for (key, val) in self.__dict__.items():
+            if isinstance(val, int):
+                if val > target:
+                    greater.append(key)
+                else:
+                    lesser.append(key)
+            num_dick = {"target": target,
+                        "lesser": tuple(lesser),
+                        "greater": tuple(greater)}
+            return num_dick
+
+    def create_dict_1(self, target):
+        num_dic = {
+            "target": target,
+            "lesser": tuple((key for (key, val) in self.__dict__.items() if isinstance(val, int) if val < target)),
+            "greater": tuple((key for (key, val) in self.__dict__.items() if isinstance(val, int) if val > target))
+        }
+        return num_dic
+    
+    def create_dict_2(self):
+        type_dict = {}
+        for (key, val) in self.__dict__.items():
+            if type(val).__name__ not in type_dict:
+                type_dict[type(val).__name__] = [key]
+            else: 
+                type_dict[type(val).__name__].append(key)
